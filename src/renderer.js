@@ -43,8 +43,8 @@ setButton.addEventListener('click', () => {
 });
 
 window.addEventListener('load', () => {
-    window.electronAPI.doneLoading('title')
+    window.electronAPI.doneLoading('onload window')
 })
-window.addEventListener('file-reading-done', ({detail}) => {
-    console.log('window', detail)
-});
+// window.addEventListener('file-reading-done', ({detail}) => {
+//    console.log('window', detail)
+//});
