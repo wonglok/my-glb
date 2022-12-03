@@ -31,16 +31,18 @@ const createWindow = () => {
 
     let argsv = process.argv 
 
-    let filePath = argsv[2] || false
+    let filePath = argsv[1]
 
     let fileData = false
 
-    if (filePath) {
-      fileData = await fs.readFile(filePath).promise()
+    if (filePath && filePath.indexOf('.') === 0) {
+      fs.readFile(filePath, (err, fileData) => {
+          win.webContents.send('file-reading-done', { 'SAVED': 'File Saved', err, argsv, filePath, fileData: fileData });
+      })
+    } else {
+      win.webContents.send('file-reading-done', { 'SAVED': 'File Saved', err, argsv, filePath: false, fileData: fileData  });
     }
-    
-    win.webContents.send('file-reading-done', { 'SAVED': 'File Saved', argsv, filePath: argsv[2], fileData: fileData });
-        
+  
   })
 
 

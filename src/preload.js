@@ -7,8 +7,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 })
 
 ipcRenderer.on('file-reading-done', function (evt, message) {
-    console.log(message); // Returns: {'SAVED': 'File Saved'}
+    console.log(message); // Returns: {'SAVED': 'File Saved'}   
 
-
+    window.dispatchEvent(new CustomEvent('file-reading-done', {detail: message}))
     
 });

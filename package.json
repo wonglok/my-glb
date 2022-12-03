@@ -5,7 +5,7 @@
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
-    "start": "electron-forge start",
+    "dev": "electron-forge start",
     "package": "electron-forge package",
     "deploy": "electron-forge package",
     "make": "electron-forge make",
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
+    "file-loader": "^6.2.0",
     "three": "^0.147.0"
   }
 }
