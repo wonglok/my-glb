@@ -1,11 +1,18 @@
-import { PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { PerspectiveCamera, Scene, TextureLoader, WebGLRenderer } from "three";
 import { taskManager } from "./TaskManager";
 import { Viewer } from "./Viewer";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
 export class GraphicsApp {
     constructor () {
         this.gl = new WebGLRenderer({alpha: true,})
+        window.addEventListener('resize', () => {
+            this.gl.setSize(window.innerWidth, window.innerHeight, true)
+        })
+        window.dispatchEvent(new CustomEvent('resize'))
+        //
         this.scene = new Scene()
+        this.scene.background = new TextureLoader().load(`/hdr/brown_photostudio_05_1k.hdr`)
+
         this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 500)
         this.tm = taskManager
         this.tm.state = this
@@ -15,7 +22,6 @@ export class GraphicsApp {
             st.gl.render(this.scene, this.camera)
         })
         
-        // 
         this.scene.add(new Viewer({ core: this }))
 
         this.orbit = new OrbitControls(this.camera, this.gl.domElement)
@@ -25,6 +31,7 @@ export class GraphicsApp {
         this.tm.onLoop(() => {
             this.orbit.update()
         })
+
 
         //
     }

@@ -11,15 +11,15 @@ export class Viewer extends Object3D {
         this.draco.setPath('/draco/')
         this.loader.setDRACOLoader(this.draco)
      
-
         window.addEventListener('file-reading-done', ({ detail }) => {
-
             if (detail.fileData) {
                 this.loader.parseAsync(detail.fileData.buffer).then((glb) => {
                     this.core.scene.add(glb.scene)
                 })
             }
         });
+
+        window.electronAPI.doneLoading('onload-window')
         //this.add(glb.scene)
         
     }
