@@ -14,12 +14,16 @@ export class GraphicsApp {
         this.tm.onLoop((st, dt) => {
             st.gl.render(this.scene, this.camera)
         })
-
+        
+        // 
         this.scene.add(new Viewer({ core: this }))
 
-        let orbit = new OrbitControls(this.camera, this.gl.domElement)
+        this.orbit = new OrbitControls(this.camera, this.gl.domElement)
+        this.orbit.object.position.z = 10
+        this.orbit.enableDamping = true
+        this.orbit.rotateSpeed = 1.3
         this.tm.onLoop(() => {
-            orbit.update()
+            this.orbit.update()
         })
 
         //
