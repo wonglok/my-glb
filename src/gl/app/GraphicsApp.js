@@ -2,6 +2,7 @@ import { Color, EquirectangularReflectionMapping, PerspectiveCamera, Scene, sRGB
 import { taskManager } from "./TaskManager";
 import { Viewer } from "./Viewer";
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
+import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js'
 export class GraphicsApp {
     constructor () {
         this.gl = new WebGLRenderer({alpha: true,})
@@ -14,8 +15,7 @@ export class GraphicsApp {
         window.dispatchEvent(new CustomEvent('resize'))
         //
        
-        new TextureLoader().load(`./hdri/brown_photostudio_05_1k.hdr`, (t) => {
-            t.encoding = sRGBEncoding
+        new RGBELoader().load(`./hdri/brown_photostudio_05_1k.hdr`, (t) => {
             t.mapping = EquirectangularReflectionMapping
             this.scene.background = new Color('#ffffff')
             this.scene.environment = t
