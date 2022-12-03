@@ -19,7 +19,7 @@ export class Viewer extends Object3D {
             }
         });
 
-        window.electronAPI.doneLoading('onload-window')
+        window.electronAPI.doneLoading('my-glb')
         //this.add(glb.scene)
         
     }
