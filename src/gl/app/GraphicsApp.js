@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { taskManager } from "./TaskManager";
 import { Viewer } from "./Viewer";
-import {OribtControls} from 'three/examples/jsm/controls/OrbitControls.js'
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js'
 export class GraphicsApp {
     constructor () {
         this.gl = new WebGLRenderer({alpha: true,})
@@ -17,7 +17,7 @@ export class GraphicsApp {
 
         this.scene.add(new Viewer({ core: this }))
 
-        let orbit = new OribtControls(this.camera, this.gl.domElement)
+        let orbit = new OrbitControls(this.camera, this.gl.domElement)
         this.tm.onLoop(() => {
             orbit.update()
         })
