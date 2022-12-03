@@ -26,8 +26,12 @@
  * ```
  */
 
+import { GraphicsApp } from './gl/app/GraphicsApp';
 import './index.css';
-import * as TRHEE from 'three';
+
+
+new GraphicsApp()
+
 
 console.log('👋 This message is being logged by "renderer.js", included via webpack');
 
@@ -38,6 +42,9 @@ setButton.addEventListener('click', () => {
     window.electronAPI.doneLoading(title)
 });
 
+window.addEventListener('load', () => {
+    window.electronAPI.doneLoading('title')
+})
 window.addEventListener('file-reading-done', ({detail}) => {
     console.log('window', detail)
 });

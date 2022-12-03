@@ -20,9 +20,10 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY)
   
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
-
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools();
+  }
+ 
   
   ipcMain.on('done-loading', async (event, title) => {
     const webContents = event.sender
@@ -35,16 +36,14 @@ const createWindow = () => {
 
     let fileData = false
 
-    if (filePath && filePath.indexOf('.') === 0) {
+    if (filePath && filePath !== '.') {
       fs.readFile(filePath, (err, fileData) => {
           win.webContents.send('file-reading-done', { 'SAVED': 'File Saved', err, argsv, filePath, fileData: fileData });
       })
     } else {
-      win.webContents.send('file-reading-done', { 'SAVED': 'File Saved', err, argsv, filePath: false, fileData: fileData  });
+      win.webContents.send('file-reading-done', { 'SAVED': 'File Saved', err: '', argsv, filePath: false, fileData: fileData  });
     }
-  
   })
-
 
 };
 
