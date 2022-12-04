@@ -30,14 +30,12 @@ export class Viewer extends Object3D {
                 })
 
                 //
-                let dnd = window.document.createElement('div')
+                let dnd = window.document.createElement('button')
                 dnd.style.position = 'fixed'
                 dnd.style.top = '0px'
                 dnd.style.left = '0px'
                 dnd.style.display = 'block'
                 dnd.style.zIndex = '30000'
-                dnd.style.padding = '3px'
-                dnd.style.backgroundColor = 'rgba(255,255,255,1.0)'
 
                 dnd.onclick = async () => {
                     let arrayBuffer = await detail.fileData.buffer

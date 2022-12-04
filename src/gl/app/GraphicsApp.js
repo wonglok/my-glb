@@ -32,7 +32,6 @@ export class GraphicsApp {
         )
 
         this.tm = taskManager
-
         this.tm.state = this
 
         this.tm.onLoop((st, dt) => {
@@ -45,6 +44,14 @@ export class GraphicsApp {
         this.setupResizer()
         this.setupControls()
         this.setupLighting()
+    }
+    setupLabel() {
+        let label = document.createElement('button')
+        label.style.display = `block`
+        label.style.position = `position`
+        label.style.bottom = `0px`
+        label.style.right = `0px`
+        label.innerHTML = 'Use WASD to walk around, Drag to Rotate'
     }
     setupResizer() {
         window.addEventListener('resize', () => {
@@ -97,7 +104,7 @@ export class GraphicsApp {
             this.controlMode = 'first-person'
             this.reset()
         }
-        btn1.innerHTML = 'WASD QE Walk Mode'
+        btn1.innerHTML = 'Walk Mode'
 
         let btn2 = document.createElement('button')
         btn2.onclick = () => {
