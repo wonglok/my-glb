@@ -80,6 +80,7 @@ export class GraphicsApp {
                 this.orbit.minDistance = 0
                 this.orbit.maxDistance = 0.0001
                 this.orbit.rotateSpeed = -0.9
+                this.orbit.update()
             } else if (this.controlMode === 'orbit-mode') {
                 this.orbit.minDistance = 5
                 this.orbit.maxDistance = Infinity
