@@ -65,14 +65,14 @@ const createWindow = (filePath = false) => {
     })
 }
 
-let initOpenFileQueue = []
+let initOpenFileQueue = ''
 
 // Attempt to bind file opening #2
 app.on('will-finish-launching', () => {
     // Event fired When someone drags files onto the icon while your app is running
     app.on('open-file', (event, file) => {
         if (app.isReady() === false) {
-            initOpenFileQueue.push(file)
+            initOpenFileQueue = file
         } else {
             createWindow(file)
         }
@@ -84,11 +84,9 @@ app.on('will-finish-launching', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-    if (initOpenFileQueue.length) {
-        initOpenFileQueue.forEach((file) => createWindow(file))
-        while (initOpenFileQueue.length > 0) {
-            initOpenFileQueue.pop()
-        }
+    if (initOpenFileQueue) {
+        createWindow(initOpenFileQueue)
+        initOpenFileQueue = ''
     } else {
         createWindow()
     }
