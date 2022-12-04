@@ -37,6 +37,8 @@ export class Viewer extends Object3D {
                 dnd.style.display = 'block'
                 dnd.style.zIndex = '30000'
 
+                dnd.innerHTML = 'compress and download'
+
                 dnd.onclick = async () => {
                     let arrayBuffer = await detail.fileData.buffer
 
@@ -74,12 +76,12 @@ export class Viewer extends Object3D {
                         textureResize({ size: [2048, 2048] })
                     )
 
-                    let hh = ({ detail }) => {
-                        dnd.innerHTML = `Compression ${(detail * 100).toFixed(
-                            3
-                        )}%`
-                    }
-                    window.addEventListener('progress-notice', hh)
+                    // let hh = ({ detail }) => {
+                    //     dnd.innerHTML = `Compression ${(detail * 100).toFixed(
+                    //         3
+                    //     )}%`
+                    // }
+                    // window.addEventListener('progress-notice', hh)
                     await document.transform(
                         // Remove duplicate vertex or texture data, if any.
                         // Remove unused nodes, textures, or other data.
@@ -94,12 +96,13 @@ export class Viewer extends Object3D {
                             onProgress: (p) => {
                                 dnd.innerHTML = `Compression ${(
                                     p * 100
-                                ).toFixed(3)}%`
+                                ).toFixed(1)}%`
                             },
                         })
                     )
 
                     const glb = await io.writeBinary(document) // Document → Uint8Array
+                    dnd.innerHTML = `Compress and Download `
 
                     function basename(path) {
                         return path.replace(/\\/g, '/').replace(/.*\//, '')
@@ -160,10 +163,9 @@ export class Viewer extends Object3D {
                     an.target = '_blank'
                     an.click()
                     an.onclick = () => {
-                        window.removeEventListener('progress-notice', hh)
+                        // window.removeEventListener('progress-notice', hh)
                     }
                 }
-                dnd.innerHTML = 'compress and download'
 
                 window.document.body.appendChild(dnd)
             }

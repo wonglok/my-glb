@@ -41,17 +41,24 @@ export class GraphicsApp {
         this.scene.add(new Viewer({ core: this }))
 
         //
+        this.setupLabel()
         this.setupResizer()
         this.setupControls()
         this.setupLighting()
     }
     setupLabel() {
-        let label = document.createElement('button')
+        let label = document.createElement('div')
         label.style.display = `block`
-        label.style.position = `position`
+        label.style.position = `absolute`
         label.style.bottom = `0px`
         label.style.right = `0px`
+        label.style.zIndex = `100`
         label.innerHTML = 'Use WASD to walk around, Drag to Rotate'
+
+        label.style.padding = `3px 15px`
+        label.style.background = `white`
+        label.style.font = `15px`
+        document.body.appendChild(label)
     }
     setupResizer() {
         window.addEventListener('resize', () => {
