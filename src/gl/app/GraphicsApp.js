@@ -53,7 +53,8 @@ export class GraphicsApp {
         label.style.bottom = `0px`
         label.style.right = `0px`
         label.style.zIndex = `100`
-        label.innerHTML = 'Use WASD to walk around, Drag to Rotate'
+        label.innerHTML =
+            'Use WASD to walk around, Drag to Rotate, QE to float and sink'
 
         label.style.padding = `3px 15px`
         label.style.background = `white`
