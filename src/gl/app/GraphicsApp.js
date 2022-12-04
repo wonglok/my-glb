@@ -55,15 +55,53 @@ export class GraphicsApp {
 
         this.orbit = new OrbitControls(this.camera, this.gl.domElement)
         this.orbit.enableDamping = true
-        this.orbit.rotateSpeed = 1.3
-        this.orbit.minDistance = 0
-        this.orbit.maxDistance = 0.000001
-        this.orbit.rotateSpeed = -1
-        this.camera.position.z = 20
         this.player = new Object3D()
         this.chaseTarget = new Object3D()
+
+        this.camera.position.z = 3
         this.player.position.z = 3
         this.chaseTarget.position.z = 3
+        this.orbit.minDistance = 0
+        this.orbit.maxDistance = 0.000001
+
+        this.reset = () => {
+            if (this.controlMode === 'first-person') {
+                this.orbit.minDistance = 0
+                this.orbit.maxDistance = 0.0001
+                this.orbit.rotateSpeed = -1.3
+            } else if (this.controlMode === 'orbit-mode') {
+                this.orbit.minDistance = 10
+                this.orbit.maxDistance = Infinity
+                this.orbit.rotateSpeed = 1.3
+            }
+        }
+        this.controlMode = 'first-person'
+        this.reset()
+
+        let btn1 = document.createElement('button')
+        btn1.onclick = () => {
+            this.controlMode = 'first-person'
+            this.reset()
+        }
+        btn1.innerHTML = 'Walk Mode'
+
+        let btn2 = document.createElement('button')
+        btn2.onclick = () => {
+            this.controlMode = 'orbit-mode'
+            this.reset()
+        }
+        btn2.innerHTML = 'Orbit Mode'
+
+        let topRight = document.createElement('div')
+        topRight.style.position = 'absolute'
+        topRight.style.top = '0px'
+        topRight.style.right = '0px'
+        topRight.style.zIndex = '1000'
+
+        topRight.appendChild(btn1)
+        topRight.appendChild(btn2)
+        document.body.appendChild(topRight)
+
         this.tm.onLoop(() => {
             this.player.position.lerp(this.chaseTarget.position, 0.1)
             this.orbit.update()
@@ -87,22 +125,22 @@ export class GraphicsApp {
             if (this.keyboardDown.w) {
                 delta3.set(0, 0, -1)
                 delta3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(delta3, dt * 15.5)
+                this.chaseTarget.position.addScaledVector(delta3, dt * 10.0)
             }
             if (this.keyboardDown.s) {
                 delta3.set(0, 0, 1)
                 delta3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(delta3, dt * 15.5)
+                this.chaseTarget.position.addScaledVector(delta3, dt * 10.0)
             }
             if (this.keyboardDown.a) {
                 delta3.set(-1, 0, 0)
                 delta3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(delta3, dt * 15.5)
+                this.chaseTarget.position.addScaledVector(delta3, dt * 10.0)
             }
             if (this.keyboardDown.d) {
                 delta3.set(1, 0, 0)
                 delta3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(delta3, dt * 15.5)
+                this.chaseTarget.position.addScaledVector(delta3, dt * 10.0)
             }
 
             if (this.keyboardDown.e) {
@@ -124,8 +162,10 @@ export class GraphicsApp {
         })
 
         let wheel = new WheelGesture(this.gl.domElement, (ev) => {
-            this.camera.fov += ev.delta[1] / 100
-            this.camera.updateProjectionMatrix()
+            if ((this.controlMode = 'first-person')) {
+                this.camera.fov += ev.delta[1] / 100
+                this.camera.updateProjectionMatrix()
+            }
         })
 
         //
