@@ -2,7 +2,9 @@ module.exports = {
   packagerConfig: {
     icon: './appicon',
   },
-  rebuildConfig: {},
+  rebuildConfig: {
+    extendInfo: 'Info.plist',
+  },
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
