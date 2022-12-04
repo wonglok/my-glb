@@ -606,6 +606,18 @@
   dependencies:
     "@types/node" "*"
 
+"@use-gesture/core@10.2.22":
+  version "10.2.22"
+  resolved "https://registry.yarnpkg.com/@use-gesture/core/-/core-10.2.22.tgz#90bd543b042e6c3a40a69ce8c2c38ecb67f43a2f"
+  integrity sha512-Ek0JZFYfk+hicLmoG094gm3YOuDMBNckHb988e59YOZoAkETT8dQSzT+g3QkSHSiP1m5wFXAGPSgxvOuwvGKHQ==
+
+"@use-gesture/vanilla@^10.2.22":
+  version "10.2.22"
+  resolved "https://registry.yarnpkg.com/@use-gesture/vanilla/-/vanilla-10.2.22.tgz#784dfca07af0f35d480fa15a0f56c5d6a561dc34"
+  integrity sha512-K/wzEYmvTlAhhuaOaOYmNYYzlrHfT53bMe07g1KFz611GdWXORePYFeMnVTrrwuryZCdiD1dSlaAmry+UhCCYQ==
+  dependencies:
+    "@use-gesture/core" "10.2.22"
+
 "@vercel/webpack-asset-relocator-loader@1.7.3":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@vercel/webpack-asset-relocator-loader/-/webpack-asset-relocator-loader-1.7.3.tgz#e65ca1fd9feb045039788f9b4710e5acc84b01b0"

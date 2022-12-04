@@ -13,6 +13,8 @@ import { taskManager } from './TaskManager'
 import { Viewer } from './Viewer'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+import { WheelGesture } from '@use-gesture/vanilla'
+
 export class GraphicsApp {
     constructor() {
         this.gl = new WebGLRenderer({ alpha: true })
@@ -111,6 +113,13 @@ export class GraphicsApp {
                 ttv3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
                 this.chaseTarget.position.addScaledVector(ttv3, dt * 15.5)
             }
+        })
+
+        let wheel = new WheelGesture(this.gl.domElement, (ev) => {
+            console.log(ev)
+
+            this.camera.fov += ev.delta[1] / 100
+            this.camera.updateProjectionMatrix()
         })
 
         //

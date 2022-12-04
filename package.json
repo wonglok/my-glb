@@ -30,6 +30,7 @@
     "style-loader": "^3.0.0"
   },
   "dependencies": {
+    "@use-gesture/vanilla": "^10.2.22",
     "electron-squirrel-startup": "^1.0.0",
     "file-loader": "^6.2.0",
     "three": "^0.147.0"
