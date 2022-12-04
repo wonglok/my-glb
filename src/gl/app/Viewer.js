@@ -19,7 +19,7 @@ export class Viewer extends Object3D {
 
         this.loader = new GLTFLoader()
         this.draco = new DRACOLoader()
-        this.draco.setPath('/draco/')
+        this.draco.setDecoderPath('./draco/')
         this.loader.setDRACOLoader(this.draco)
 
         window.addEventListener('file-reading-done', async ({ detail }) => {

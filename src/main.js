@@ -86,6 +86,9 @@ app.on('will-finish-launching', () => {
 app.on('ready', () => {
     if (initOpenFileQueue.length) {
         initOpenFileQueue.forEach((file) => createWindow(file))
+        while (initOpenFileQueue.length > 0) {
+            initOpenFileQueue.pop()
+        }
     } else {
         createWindow()
     }
