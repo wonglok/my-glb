@@ -29,34 +29,22 @@ const createWindow = (filePath = false) => {
         const win = BrowserWindow.fromWebContents(webContents)
         win.setTitle(title)
 
-        let argsv = process.argv
-
-        console.log(filePath)
-
-        filePath = filePath || argsv[1]
-
         if (filePath && filePath !== '.') {
             fs.readFile(filePath, async (err, fileData) => {
-                // console.log(err)
-
                 win.webContents.send('file-reading-done', {
                     SAVED: 'File Saved',
                     err,
-                    argsv,
                     filePath,
                     fileData: fileData,
                 })
             })
         } else {
+            // default file
             let filePath = path.join(__dirname, `glb/demo.glb`)
-
             fs.readFile(filePath, (err, fileData) => {
-                // console.log(err)
-
                 win.webContents.send('file-reading-done', {
                     SAVED: 'File Saved',
                     err,
-                    argsv,
                     filePath,
                     fileData: fileData,
                 })
@@ -65,49 +53,70 @@ const createWindow = (filePath = false) => {
     })
 }
 
-let initOpenFileQueue = ''
-
-// Attempt to bind file opening #2
+// // // Attempt to bind file opening #2
 app.on('will-finish-launching', () => {
-    // Event fired When someone drags files onto the icon while your app is running
-    app.on('open-file', (event, file) => {
-        if (app.isReady() === false) {
-            initOpenFileQueue = file
-        } else {
-            createWindow(file)
-        }
-        event.preventDefault()
-    })
+    if (process.platform === 'darwin') {
+        app.on('open-file', (event, file) => {
+            event.preventDefault()
+
+            let tt = setInterval(() => {
+                if (app.isReady()) {
+                    clearInterval(tt)
+                    createWindow(file)
+                }
+            }, 0)
+        })
+    }
 })
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+// // This method will be called when Electron has finished
+// // initialization and is ready to create browser windows.
+// // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-    if (initOpenFileQueue) {
-        createWindow(initOpenFileQueue)
-        initOpenFileQueue = ''
-    } else {
-        createWindow()
+    let argsv = process.argv
+    let url = argsv[1]
+
+    if (url) {
+        createWindow(url)
     }
+    // if (url) {
+    //     initOpenFileQueue = url
+    // }
+
+    // let tt = setInterval(() => {
+    //     if (initOpenFileQueue) {
+    //         clearInterval(tt)
+    //         createWindow(initOpenFileQueue)
+    //     }
+    // })
+
+    // if (initOpenFileQueue) {
+    //     createWindow(initOpenFileQueue)
+    //     initOpenFileQueue = ''
+    // } else {
+    // }
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+    app.quit()
+    // if (process.platform === 'darwin') {
+    // }
 })
 
-app.on('activate', () => {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow()
-    }
-})
+// app.on('activate', () => {
+//     // On OS X it's common to re-create a window in the app when the
+//     // dock icon is clicked and there are no other windows open.
+//     if (
+//         process.platform === 'darwin' &&
+//         BrowserWindow.getAllWindows().length === 0
+//     ) {
+//         // createWindow()
+//         app.quit()
+//     }
+// })
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

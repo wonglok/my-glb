@@ -62,8 +62,8 @@ export class GraphicsApp {
         this.camera.position.z = 20
         this.player = new Object3D()
         this.chaseTarget = new Object3D()
-        this.player.position.z = 15
-        this.chaseTarget.position.z = 15
+        this.player.position.z = 3
+        this.chaseTarget.position.z = 3
         this.tm.onLoop(() => {
             this.player.position.lerp(this.chaseTarget.position, 0.1)
             this.orbit.update()
@@ -118,8 +118,6 @@ export class GraphicsApp {
         })
 
         let wheel = new WheelGesture(this.gl.domElement, (ev) => {
-            console.log(ev)
-
             this.camera.fov += ev.delta[1] / 100
             this.camera.updateProjectionMatrix()
         })
