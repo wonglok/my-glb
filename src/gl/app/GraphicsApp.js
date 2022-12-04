@@ -24,7 +24,7 @@ export class GraphicsApp {
         this.camera = new PerspectiveCamera(
             75,
             window.innerWidth / window.innerHeight,
-            1,
+            0.1,
             500
         )
 
@@ -108,12 +108,18 @@ export class GraphicsApp {
             if (this.keyboardDown.e) {
                 delta3.set(0, 1, 0)
                 delta3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(delta3, dt * 15.5)
+                this.chaseTarget.position.addScaledVector(
+                    delta3,
+                    dt * 15.5 * 0.3
+                )
             }
             if (this.keyboardDown.q) {
                 delta3.set(0, -1, 0)
                 delta3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(delta3, dt * 15.5)
+                this.chaseTarget.position.addScaledVector(
+                    delta3,
+                    dt * 15.5 * 0.3
+                )
             }
         })
 
