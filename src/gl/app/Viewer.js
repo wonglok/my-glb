@@ -98,8 +98,9 @@ export class Viewer extends Object3D {
                 dnd.style.top = '0px'
                 dnd.style.left = '0px'
                 dnd.style.display = 'block'
+                dnd.style.zIndex = '30000'
 
-                dnd.innerText = 'donwload optimised'
+                dnd.innerText = 'donwload-optimised'
                 dnd.download = newFileName
 
                 dnd.href = link
