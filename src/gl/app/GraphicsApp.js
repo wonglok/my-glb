@@ -27,6 +27,8 @@ export class GraphicsApp {
         window.addEventListener('resize', () => {
             this.gl.setSize(window.innerWidth, window.innerHeight, true)
             this.gl.setPixelRatio(window.devicePixelRatio || 1.0)
+            this.camera.aspect = window.innerWidth / window.innerHeight
+            this.camera.updateProjectionMatrix()
         })
         window.dispatchEvent(new CustomEvent('resize'))
         //
