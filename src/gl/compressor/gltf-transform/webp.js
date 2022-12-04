@@ -108,6 +108,8 @@ export const squoosh = function (_options) {
     // const squoosh = options.squoosh as typeof SquooshLib | null
     const codec = options.codec
 
+    let onProgress = _options.onProgress || ((v) => console.log(v))
+
     return async (document) => {
         const logger = document.getLogger()
         const textures = document.getRoot().listTextures()
@@ -212,6 +214,8 @@ export const squoosh = function (_options) {
                             'done encoding webp....',
                             (tick / total) * 100 + '%'
                         )
+
+                        onProgress()
                         window.dispatchEvent(
                             new CustomEvent('progress-notice', {
                                 detail: tick / total,
