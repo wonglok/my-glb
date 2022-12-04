@@ -52,23 +52,52 @@ export class Viewer extends Object3D {
 
                     document = await io.readBinary(new Uint8Array(arrayBuffer)) // Uint8Array → Document
 
+                    dnd.innerHTML = `Remove Duplicate Buffers / Textures`
                     await document.transform(
                         // Remove duplicate vertex or texture data, if any.
-                        dedup(),
+                        dedup()
+                    )
 
-                        instance(),
+                    dnd.innerHTML = `Enable Instancing`
+                    await document.transform(
+                        // Remove duplicate vertex or texture data, if any.
+                        instance()
+                    )
 
+                    dnd.innerHTML = `Remove Unused buffers`
+                    await document.transform(
+                        // Remove duplicate vertex or texture data, if any.
+                        prune()
+                    )
+
+                    dnd.innerHTML = `Texture Reduction, may took a long time....`
+                    await document.transform(
+                        // Remove duplicate vertex or texture data, if any.
+                        textureResize({ size: [2048, 2048] })
+                    )
+
+                    let hh = ({ detail }) => {
+                        dnd.innerHTML = `Compression ${(detail * 100).toFixed(
+                            3
+                        )}%`
+                    }
+                    window.addEventListener('progress-notice', hh)
+                    await document.transform(
+                        // Remove duplicate vertex or texture data, if any.
                         // Remove unused nodes, textures, or other data.
-                        prune(),
 
                         // Losslessly resample animation frames.
                         // resample(),
 
                         // Resize all textures to ≤1K.
-                        textureResize({ size: [2048, 2048] }),
 
                         webpTransform({
                             //
+                            onProgress: (p) => {
+                                dnd.innerHTML = `Compression ${(
+                                    p * 100
+                                ).toFixed(3)}%`
+                            },
                         })
                     )
 
@@ -91,7 +120,29 @@ export class Viewer extends Object3D {
                             type: 'application/octet-stream',
                         })
                     )
-
+                    /**
+                     * Returns a hash code for a string.
+                     * (Compatible to Java's String.hashCode())
+                     *
+                     * The hash code for a string object is computed as
+                     *     s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+                     * using number arithmetic, where s[i] is the i th character
+                     * of the given string, n is the length of the string,
+                     * and ^ indicates exponentiation.
+                     * (The hash value of the empty string is zero.)
+                     *
+                     * @param {string} s a string
+                     * @return {number} a hash code value for the given string.
+                     */
+                    let hashCode = function (s) {
+                        var h = 0,
+                            l = s.length,
+                            i = 0
+                        if (l > 0)
+                            while (i < l)
+                                h = ((h << 5) - h + s.charCodeAt(i++)) | 0
+                        return h
+                    }
                     console.log(
                         'before',
                         arrayBuffer.byteLength,
@@ -99,16 +150,10 @@ export class Viewer extends Object3D {
                         glb.buffer.byteLength
                     )
 
-                    let hh = ({ detail }) => {
-                        dnd.innerHTML = `Compression ${(detail * 100).toFixed(
-                            3
-                        )}%`
-                    }
-                    window.addEventListener('progress-notice', hh)
                     let newFileName =
                         fileNameWithoutExt +
                         '-' +
-                        md5(glb.buffer.byteLength) +
+                        hashCode(md5(glb.buffer.byteLength)) +
                         '.glb'
 
                     let an = window.document.createElement('a')
@@ -116,7 +161,9 @@ export class Viewer extends Object3D {
                     an.download = newFileName
                     an.target = '_blank'
                     an.click()
-                    window.removeEventListener('progress-notice', hh)
+                    an.onclick = () => {
+                        window.removeEventListener('progress-notice', hh)
+                    }
                 }
                 dnd.innerHTML = 'compress and download'
 
