@@ -193,6 +193,7 @@ export const squoosh = function (_options) {
                         // COMPRESS: Run `squoosh/lib` library.
 
                         console.log('begin encoding webp....')
+
                         let url = URL.createObjectURL(
                             new Blob([texture.getImage().buffer], {})
                         )
