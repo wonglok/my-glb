@@ -1,47 +1,47 @@
 module.exports = {
-  packagerConfig: {
-    icon: './appicon',
-  },
-  rebuildConfig: {
-    extendInfo: 'Info.plist',
-  },
-  makers: [
-    {
-      name: '@electron-forge/maker-squirrel',
-      config: {},
+    packagerConfig: {
+        icon: './appicon',
     },
-    {
-      name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
+    rebuildConfig: {
+        extendInfo: 'Info.plist',
     },
-    {
-      name: '@electron-forge/maker-deb',
-      config: {},
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
-    },
-  ],
-  plugins: [
-    {
-      name: '@electron-forge/plugin-webpack',
-      config: {
-        mainConfig: './webpack.main.config.js',
-        renderer: {
-          config: './webpack.renderer.config.js',
-          entryPoints: [
-            {
-              html: './src/index.html',
-              js: './src/renderer.js',
-              name: 'main_window',
-              preload: {
-                js: './src/preload.js',
-              },
-            },
-          ],
+    makers: [
+        {
+            name: '@electron-forge/maker-squirrel',
+            config: {},
         },
-      },
-    },
-  ],
+        {
+            name: '@electron-forge/maker-zip',
+            platforms: ['darwin'],
+        },
+        {
+            name: '@electron-forge/maker-deb',
+            config: {},
+        },
+        {
+            name: '@electron-forge/maker-rpm',
+            config: {},
+        },
+    ],
+    plugins: [
+        {
+            name: '@electron-forge/plugin-webpack',
+            config: {
+                mainConfig: './webpack.main.config.js',
+                renderer: {
+                    config: './webpack.renderer.config.js',
+                    entryPoints: [
+                        {
+                            html: './src/index.html',
+                            js: './src/renderer.js',
+                            name: 'main_window',
+                            preload: {
+                                js: './src/preload.js',
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    ],
 }

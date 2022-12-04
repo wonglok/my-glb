@@ -204,7 +204,6 @@ export const squoosh = function (_options) {
                         //       width: imageData.width,
                         //       height: imageData.height,
                         //    */
-
                         //   console.log(ev)
                         // })
 
@@ -212,6 +211,11 @@ export const squoosh = function (_options) {
                         console.log(
                             'done encoding webp....',
                             (tick / total) * 100 + '%'
+                        )
+                        window.dispatchEvent(
+                            new CustomEvent('progress-notice', {
+                                detail: tick / total,
+                            })
                         )
 
                         // const image = pool.ingestImage(texture.getImage()!)

@@ -547,7 +547,7 @@ if (ENVIRONMENT_IS_NODE) {
     if (!MyCache.has('blobWASM')) {
         MyCache.set(
             'blobWASM',
-            fetch('/webp/webp.wasm').then((e) => e.blob())
+            fetch('./webp/webp.wasm').then((e) => e.blob())
         )
     }
 
