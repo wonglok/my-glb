@@ -25,6 +25,7 @@ export class Viewer extends Object3D {
         window.addEventListener('file-reading-done', async ({ detail }) => {
             if (detail.fileData) {
                 this.loader.parseAsync(detail.fileData.buffer).then((glb) => {
+                    this.core.scene.clear()
                     this.core.scene.add(glb.scene)
                 })
 
