@@ -69,9 +69,9 @@ export class GraphicsApp {
         this.player = new Object3D()
         this.chaseTarget = new Object3D()
 
-        this.camera.position.z = 3
-        this.player.position.z = 3
-        this.chaseTarget.position.z = 3
+        this.camera.position.z = 5
+        this.player.position.z = 5
+        this.chaseTarget.position.z = 5
         this.orbit.minDistance = 0
         this.orbit.maxDistance = 0.000001
 
