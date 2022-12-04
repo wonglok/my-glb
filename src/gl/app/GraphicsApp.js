@@ -17,8 +17,11 @@ import { WheelGesture } from '@use-gesture/vanilla'
 export class GraphicsApp {
     constructor() {
         this.gl = new WebGLRenderer({ alpha: true })
+        document.querySelector('#root').appendChild(this.gl.domElement)
+
         this.gl.outputEncoding = sRGBEncoding
         this.gl.physicallyCorrectLights = true
+
         this.scene = new Scene()
 
         this.camera = new PerspectiveCamera(
@@ -28,24 +31,9 @@ export class GraphicsApp {
             500
         )
 
-        window.addEventListener('resize', () => {
-            this.gl.setSize(window.innerWidth, window.innerHeight, true)
-            this.gl.setPixelRatio(window.devicePixelRatio || 1.0)
-            this.camera.aspect = window.innerWidth / window.innerHeight
-            this.camera.updateProjectionMatrix()
-        })
-        window.dispatchEvent(new CustomEvent('resize'))
-        //
-
-        new RGBELoader().load(`./hdri/greenwich_park_02_1k.hdr`, (t) => {
-            t.mapping = EquirectangularReflectionMapping
-            this.scene.background = new Color('#ffffff')
-            this.scene.environment = t
-        })
-
         this.tm = taskManager
+
         this.tm.state = this
-        document.querySelector('#root').appendChild(this.gl.domElement)
 
         this.tm.onLoop((st, dt) => {
             st.gl.render(this.scene, this.camera)
@@ -53,8 +41,31 @@ export class GraphicsApp {
 
         this.scene.add(new Viewer({ core: this }))
 
+        //
+        this.setupResizer()
+        this.setupControls()
+        this.setupLighting()
+    }
+    setupResizer() {
+        window.addEventListener('resize', () => {
+            this.gl.setSize(window.innerWidth, window.innerHeight, true)
+            this.gl.setPixelRatio(window.devicePixelRatio || 1.0)
+            this.camera.aspect = window.innerWidth / window.innerHeight
+            this.camera.updateProjectionMatrix()
+        })
+        window.dispatchEvent(new CustomEvent('resize'))
+    }
+    setupLighting() {
+        new RGBELoader().load(`./hdri/greenwich_park_02_1k.hdr`, (t) => {
+            t.mapping = EquirectangularReflectionMapping
+            this.scene.background = new Color('#ffffff')
+            this.scene.environment = t
+        })
+    }
+    setupControls() {
         this.orbit = new OrbitControls(this.camera, this.gl.domElement)
-        this.orbit.enableDamping = true
+        this.orbit.enableDamping = false
+
         this.player = new Object3D()
         this.chaseTarget = new Object3D()
 
@@ -68,11 +79,11 @@ export class GraphicsApp {
             if (this.controlMode === 'first-person') {
                 this.orbit.minDistance = 0
                 this.orbit.maxDistance = 0.0001
-                this.orbit.rotateSpeed = -1.3
+                this.orbit.rotateSpeed = -0.9
             } else if (this.controlMode === 'orbit-mode') {
                 this.orbit.minDistance = 5
                 this.orbit.maxDistance = Infinity
-                this.orbit.rotateSpeed = 1.3
+                this.orbit.rotateSpeed = 0.9
                 this.orbit.update()
                 this.orbit.minDistance = 0
             }
@@ -85,7 +96,7 @@ export class GraphicsApp {
             this.controlMode = 'first-person'
             this.reset()
         }
-        btn1.innerHTML = 'WASD Walk Mode'
+        btn1.innerHTML = 'WASD QE Walk Mode'
 
         let btn2 = document.createElement('button')
         btn2.onclick = () => {
@@ -169,7 +180,5 @@ export class GraphicsApp {
                 this.camera.updateProjectionMatrix()
             }
         })
-
-        //
     }
 }
