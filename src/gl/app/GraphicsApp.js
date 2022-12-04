@@ -70,9 +70,11 @@ export class GraphicsApp {
                 this.orbit.maxDistance = 0.0001
                 this.orbit.rotateSpeed = -1.3
             } else if (this.controlMode === 'orbit-mode') {
-                this.orbit.minDistance = 10
+                this.orbit.minDistance = 5
                 this.orbit.maxDistance = Infinity
                 this.orbit.rotateSpeed = 1.3
+                this.orbit.update()
+                this.orbit.minDistance = 0
             }
         }
         this.controlMode = 'first-person'
@@ -83,7 +85,7 @@ export class GraphicsApp {
             this.controlMode = 'first-person'
             this.reset()
         }
-        btn1.innerHTML = 'Walk Mode'
+        btn1.innerHTML = 'WASD Walk Mode'
 
         let btn2 = document.createElement('button')
         btn2.onclick = () => {
