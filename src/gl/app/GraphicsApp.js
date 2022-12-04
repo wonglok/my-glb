@@ -76,38 +76,38 @@ export class GraphicsApp {
             this.keyboardDown[ev.key] = false
         })
         let ttv3 = new Vector3()
-        let up = new Vector3()
+        let up = new Vector3(0, 1, 0)
         this.tm.onLoop((st, dt) => {
             if (this.keyboardDown.w) {
                 ttv3.set(0, 0, -1)
                 ttv3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(ttv3, dt * 13.5)
+                this.chaseTarget.position.addScaledVector(ttv3, dt * 15.5)
             }
             if (this.keyboardDown.s) {
                 ttv3.set(0, 0, 1)
                 ttv3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(ttv3, dt * 13.5)
+                this.chaseTarget.position.addScaledVector(ttv3, dt * 15.5)
             }
             if (this.keyboardDown.a) {
                 ttv3.set(-1, 0, 0)
                 ttv3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(ttv3, dt * 13.5)
+                this.chaseTarget.position.addScaledVector(ttv3, dt * 15.5)
             }
             if (this.keyboardDown.d) {
                 ttv3.set(1, 0, 0)
                 ttv3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(ttv3, dt * 13.5)
+                this.chaseTarget.position.addScaledVector(ttv3, dt * 15.5)
             }
 
             if (this.keyboardDown.e) {
                 ttv3.set(0, 1, 0)
                 ttv3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(ttv3, dt * 13.5)
+                this.chaseTarget.position.addScaledVector(ttv3, dt * 15.5)
             }
             if (this.keyboardDown.q) {
                 ttv3.set(0, -1, 0)
                 ttv3.applyAxisAngle(up, this.orbit.getAzimuthalAngle())
-                this.chaseTarget.position.addScaledVector(ttv3, dt * 13.5)
+                this.chaseTarget.position.addScaledVector(ttv3, dt * 15.5)
             }
         })
 
