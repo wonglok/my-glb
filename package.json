@@ -30,9 +30,14 @@
     "style-loader": "^3.0.0"
   },
   "dependencies": {
+    "@gltf-transform/core": "^2.4.6",
+    "@gltf-transform/extensions": "^2.4.6",
+    "@gltf-transform/functions": "^2.4.6",
+    "@squoosh/lib": "^0.4.0",
     "@use-gesture/vanilla": "^10.2.22",
     "electron-squirrel-startup": "^1.0.0",
     "file-loader": "^6.2.0",
+    "md5": "^2.3.0",
     "three": "^0.147.0"
   }
 }

@@ -4,8 +4,6 @@ import {
     Object3D,
     PerspectiveCamera,
     Scene,
-    sRGBEncoding,
-    TextureLoader,
     Vector3,
     WebGLRenderer,
 } from 'three'
@@ -18,7 +16,9 @@ import { WheelGesture } from '@use-gesture/vanilla'
 export class GraphicsApp {
     constructor() {
         this.gl = new WebGLRenderer({ alpha: true })
+
         this.scene = new Scene()
+
         this.camera = new PerspectiveCamera(
             75,
             window.innerWidth / window.innerHeight,

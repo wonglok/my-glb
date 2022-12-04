@@ -35,11 +35,9 @@ const createWindow = (filePath = false) => {
 
         filePath = filePath || argsv[1]
 
-        let fileData = false
-
         if (filePath && filePath !== '.') {
-            fs.readFile(filePath, (err, fileData) => {
-                console.log(err)
+            fs.readFile(filePath, async (err, fileData) => {
+                // console.log(err)
 
                 win.webContents.send('file-reading-done', {
                     SAVED: 'File Saved',
@@ -53,7 +51,8 @@ const createWindow = (filePath = false) => {
             let filePath = path.join(__dirname, `glb/demo.glb`)
 
             fs.readFile(filePath, (err, fileData) => {
-                console.log(err)
+                // console.log(err)
+
                 win.webContents.send('file-reading-done', {
                     SAVED: 'File Saved',
                     err,

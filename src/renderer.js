@@ -26,25 +26,7 @@
  * ```
  */
 
-import { GraphicsApp } from './gl/app/GraphicsApp';
-import './index.css';
-
+import { GraphicsApp } from './gl/app/GraphicsApp'
+import './index.css'
 
 new GraphicsApp()
-
-
-// console.log('👋 This message is being logged by "renderer.js", included via webpack');
-
-// const setButton = document.getElementById('btn')
-// const titleInput = document.getElementById('title')
-// setButton.addEventListener('click', () => {
-//     const title = titleInput.value
-//     window.electronAPI.doneLoading(title)
-// });
-
-// window.addEventListener('load', () => {
-//     window.electronAPI.doneLoading('onload window')
-// })
-// window.addEventListener('file-reading-done', ({detail}) => {
-//    console.log('window', detail)
-//});

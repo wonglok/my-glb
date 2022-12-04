@@ -6,11 +6,12 @@ module.exports = {
      * that runs in the main process.
      */
     entry: './src/main.js',
+    // target: 'node16.17',
+
     // Put your normal webpack config below here
     module: {
         rules: require('./webpack.rules'),
     },
-
     plugins: [
         new CopyPlugin({
             patterns: [{ from: './src/static' }],
