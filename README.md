@@ -1,3 +1,7 @@
 # my-glb
 
-<img width="1024" alt="image" src="https://user-images.githubusercontent.com/4082826/205523401-447c51ca-9028-4b87-bfc8-e91f9fc2f5f4.png">
+# from 20MB to 3MB
+
+
+
+<img width="1031" alt="image" src="https://user-images.githubusercontent.com/4082826/205557018-8c8c126d-c87c-4a56-8494-8b8fb6161662.png">
