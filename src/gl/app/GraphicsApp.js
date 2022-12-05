@@ -19,9 +19,6 @@ export class GraphicsApp {
         this.gl = new WebGLRenderer({ alpha: true })
         document.querySelector('#root').appendChild(this.gl.domElement)
 
-        this.gl.outputEncoding = sRGBEncoding
-        this.gl.physicallyCorrectLights = true
-
         this.scene = new Scene()
 
         this.camera = new PerspectiveCamera(
@@ -31,20 +28,21 @@ export class GraphicsApp {
             500
         )
 
-        this.tm = taskManager
-        this.tm.state = this
-
-        this.tm.onLoop((st, dt) => {
-            st.gl.render(this.scene, this.camera)
-        })
-
         this.scene.add(new Viewer({ core: this }))
 
         //
         this.setupLabel()
         this.setupResizer()
         this.setupControls()
-        this.setupLighting()
+        this.setupLightingAndColor()
+        this.setupLoop()
+    }
+    setupLoop() {
+        this.tm = taskManager
+        this.tm.state = this
+        this.tm.onLoop((st, dt) => {
+            st.gl.render(this.scene, this.camera)
+        })
     }
     setupLabel() {
         let label = document.createElement('div')
@@ -70,7 +68,10 @@ export class GraphicsApp {
         })
         window.dispatchEvent(new CustomEvent('resize'))
     }
-    setupLighting() {
+    setupLightingAndColor() {
+        this.gl.outputEncoding = sRGBEncoding
+        this.gl.physicallyCorrectLights = true
+
         new RGBELoader().load(`./hdri/greenwich_park_02_1k.hdr`, (t) => {
             t.mapping = EquirectangularReflectionMapping
             this.scene.background = new Color('#ffffff')
