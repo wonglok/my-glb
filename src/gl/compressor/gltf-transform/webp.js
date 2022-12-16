@@ -216,7 +216,7 @@ export const squoosh = function (_options) {
                             (tick / total) * 100 + '%'
                         )
 
-                        onProgress()
+                        onProgress(tick / total)
                         window.dispatchEvent(
                             new CustomEvent('progress-notice', {
                                 detail: tick / total,

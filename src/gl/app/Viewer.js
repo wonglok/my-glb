@@ -73,7 +73,7 @@ export class Viewer extends Object3D {
                     dnd.innerHTML = `Texture Reduction, may took a long time....`
                     await document.transform(
                         // Remove duplicate vertex or texture data, if any.
-                        textureResize({ size: [2048, 2048] })
+                        textureResize({ size: [1024, 1024] })
                     )
 
                     // let hh = ({ detail }) => {
