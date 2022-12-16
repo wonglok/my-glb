@@ -31,18 +31,18 @@ export class GraphicsApp {
         this.scene.add(new Viewer({ core: this }))
 
         //
+        this.setupLoop()
         this.setupLabel()
         this.setupResizer()
         this.setupControls()
         this.setupLightingAndColor()
-        this.setupLoop()
+        this.tm.onLoop((st, dt) => {
+            st.gl.render(this.scene, this.camera)
+        })
     }
     setupLoop() {
         this.tm = taskManager
         this.tm.state = this
-        this.tm.onLoop((st, dt) => {
-            st.gl.render(this.scene, this.camera)
-        })
     }
     setupLabel() {
         let label = document.createElement('div')
