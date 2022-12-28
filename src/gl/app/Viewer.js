@@ -34,7 +34,13 @@ export class Viewer extends Object3D {
                 })
 
                 //
+                let domres = document.querySelectorAll('#compressanddownload')
+                for (let i = 0; i < domres.length; i++) {
+                    domres[i]?.remove()
+                }
+
                 let dnd = window.document.createElement('button')
+                dnd.id = 'compressanddownload'
                 dnd.style.position = 'fixed'
                 dnd.style.top = '0px'
                 dnd.style.left = '0px'
@@ -51,10 +57,12 @@ export class Viewer extends Object3D {
                     io.registerExtensions([...ALL_EXTENSIONS])
 
                     // ...
-                    let dracoMod = await remoteImport(
-                        '/draco/draco_decoder_raw.js'
+
+                    let dracoMod = await import(
+                        /* webpackIgnore: true */
+                        window.location.origin + '/draco/draco_decoder_raw.js'
                     )
-                    let mod = dracoMod.DracoEncoderModule()
+                    let mod = dracoMod.DracoDecoderModule()
 
                     io.registerExtensions([
                         DracoMeshCompression,
