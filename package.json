@@ -34,6 +34,7 @@
     "@gltf-transform/extensions": "^2.4.6",
     "@gltf-transform/functions": "^2.4.6",
     "@use-gesture/vanilla": "^10.2.22",
+    "draco3dgltf": "^1.5.5",
     "electron-squirrel-startup": "^1.0.0",
     "file-loader": "^6.2.0",
     "md5": "^2.3.0",

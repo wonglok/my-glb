@@ -1734,6 +1734,11 @@ dot-case@^3.0.4:
     no-case "^3.0.4"
     tslib "^2.0.3"
 
+draco3dgltf@^1.5.5:
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/draco3dgltf/-/draco3dgltf-1.5.5.tgz#23682fbd5e00e43efb09a07015f42eed8619e80f"
+  integrity sha512-JrtTBTZHedeXCaFEIELZf71SGAK+j0LgaLW0xIBUGNNMEYzmoF72jUutLuMpY3go/bulwbd/W7PZsnJG0IQLjA==
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"

@@ -4,7 +4,10 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
 import { webpTransform } from '../compressor/gltf-transform/webp'
 import { Document, Scene, VertexLayout, WebIO } from '@gltf-transform/core'
-import { ALL_EXTENSIONS } from '@gltf-transform/extensions'
+import {
+    ALL_EXTENSIONS,
+    DracoMeshCompression,
+} from '@gltf-transform/extensions'
 import {
     dedup,
     instance,
@@ -12,6 +15,7 @@ import {
     textureResize,
 } from '@gltf-transform/functions'
 import md5 from 'md5'
+
 export class Viewer extends Object3D {
     constructor({ core }) {
         super()
@@ -45,7 +49,22 @@ export class Viewer extends Object3D {
                     const io = new WebIO({ credentials: 'include' })
 
                     io.registerExtensions([...ALL_EXTENSIONS])
-                    io.setVertexLayout(VertexLayout.SEPARATE)
+
+                    // ...
+                    let dracoMod = await remoteImport(
+                        '/draco/draco_decoder_raw.js'
+                    )
+                    let mod = dracoMod.DracoEncoderModule()
+
+                    io.registerExtensions([
+                        DracoMeshCompression,
+                    ]).registerDependencies({
+                        // 'draco3d.decoder': await draco3d.createDecoderModule(), // Optional.
+                        // 'draco3d.encoder': mod, // Optional.
+                        'draco3d.decoder': mod, // Optional.
+                    })
+
+                    // io.setVertexLayout(VertexLayout.SEPARATE)
 
                     // Read.
                     let document
