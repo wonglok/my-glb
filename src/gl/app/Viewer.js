@@ -58,19 +58,19 @@ export class Viewer extends Object3D {
 
                     // ...
 
-                    let dracoMod = await import(
-                        /* webpackIgnore: true */
-                        window.location.origin + '/draco/draco_decoder_raw.js'
-                    )
-                    let mod = dracoMod.DracoDecoderModule()
+                    // let dracoMod = await import(
+                    //     /* webpackIgnore: true */
+                    //     '/draco/draco_decoder_raw.js'
+                    // )
+                    // let mod = dracoMod.DracoDecoderModule()
 
-                    io.registerExtensions([
-                        DracoMeshCompression,
-                    ]).registerDependencies({
-                        // 'draco3d.decoder': await draco3d.createDecoderModule(), // Optional.
-                        // 'draco3d.encoder': mod, // Optional.
-                        'draco3d.decoder': mod, // Optional.
-                    })
+                    // io.registerExtensions([
+                    //     DracoMeshCompression,
+                    // ]).registerDependencies({
+                    //     // 'draco3d.decoder': await draco3d.createDecoderModule(), // Optional.
+                    //     // 'draco3d.encoder': mod, // Optional.
+                    //     'draco3d.decoder': mod, // Optional.
+                    // })
 
                     // io.setVertexLayout(VertexLayout.SEPARATE)
 
@@ -100,7 +100,7 @@ export class Viewer extends Object3D {
                     dnd.innerHTML = `Texture Reduction, may took a long time....`
                     await document.transform(
                         // Remove duplicate vertex or texture data, if any.
-                        textureResize({ size: [1024, 1024] })
+                        textureResize({ size: [2048, 2048] })
                     )
 
                     // let hh = ({ detail }) => {
