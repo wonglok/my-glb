@@ -1,6 +1,6 @@
 # my-glb
 
-# from 20MB to 3MB
+# from 60MB to 6MB
 
 
 
