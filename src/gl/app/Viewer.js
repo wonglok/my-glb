@@ -268,18 +268,18 @@ export class Viewer extends Object3D {
                 reso.style.display = 'inline-block'
                 reso.innerHTML = `
 
-                <option value={4096} selected> 4K Texture</option>
-                <option value={2048}> 2K Texture</option>
-                <option value={1024}> 1K Texture</option>
-                <option value={512}>0.5K Texture</option>
+                <option value="4096" selected> 4K Texture</option>
+                <option value="2048"> 2K Texture</option>
+                <option value="1024"> 1K Texture</option>
+                <option value="512">0.5K Texture</option>
                 `
                 dndp.appendChild(reso)
 
                 let animationOrNot = window.document.createElement('select')
                 animationOrNot.style.display = 'inline-block'
                 animationOrNot.innerHTML = `
-                <option value={false} selected> No Anim, yes Instnacing</option>
-                <option value={true}> Yes Anim, no instancing</option>
+                <option value="false" selected> No Anim, yes Instnacing</option>
+                <option value="true"> Yes Anim, no instancing</option>
                 `
                 dndp.appendChild(animationOrNot)
 
