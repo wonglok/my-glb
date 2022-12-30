@@ -60,14 +60,16 @@ export class Viewer extends Object3D {
 
                         let exporter = new GLTFExporter()
 
-                        myGLB.scene.traverse((it) => {
-                            if (it.material) {
-                                it.material.vertexColors = false
-                            }
-                        })
+                        progressDiv.innerHTML = `reforming...`
 
                         let arrayBufferFromThreeLoader = await new Promise(
                             (resolve, reject) => {
+                                myGLB.scene.traverse((it) => {
+                                    if (it.material) {
+                                        it.material.vertexColors = false
+                                    }
+                                })
+
                                 exporter.parse(
                                     myGLB.scene.children,
                                     (binary) => {
@@ -92,6 +94,7 @@ export class Viewer extends Object3D {
                         io.registerExtensions([...ALL_EXTENSIONS])
 
                         // ...
+                        progressDiv.innerHTML = `loading draco...`
 
                         let dracoMod = await import(
                             /* webpackIgnore: true */
@@ -111,6 +114,7 @@ export class Viewer extends Object3D {
 
                         // Read.
                         let document
+                        progressDiv.innerHTML = `reading...`
 
                         document = await io.readBinary(
                             new Uint8Array(arrayBuffer)
@@ -178,7 +182,7 @@ export class Viewer extends Object3D {
                             })
 
                         const glb = await io.writeBinary(document) // Document → Uint8Array
-                        progressDiv.innerHTML = ``
+                        progressDiv.innerHTML = `Status: Ready`
 
                         function basename(path) {
                             return path.replace(/\\/g, '/').replace(/.*\//, '')
