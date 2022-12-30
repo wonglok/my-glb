@@ -26,7 +26,14 @@ export class Viewer extends Object3D {
         this.draco.setDecoderPath('./draco/')
         this.loader.setDRACOLoader(this.draco)
 
+        let done = false
         window.addEventListener('file-reading-done', async ({ detail }) => {
+            if (done) {
+                return
+            }
+            done = true
+
+            //
             if (detail.fileData) {
                 let myGLB = await this.loader
                     .parseAsync(detail.fileData.buffer)
@@ -47,7 +54,7 @@ export class Viewer extends Object3D {
                 progressDiv.innerText = `Status: Ready`
 
                 let handler =
-                    (res = 4096) =>
+                    (res = 4096, enablAnimations = false) =>
                     async () => {
                         // let arrayBufferRaw = await detail.fileData.raw
 
@@ -72,7 +79,9 @@ export class Viewer extends Object3D {
                                     () => {},
                                     {
                                         binary: true,
-                                        // animations: myGLB.animations,
+                                        animations: enablAnimations
+                                            ? myGLB.animations
+                                            : undefined,
                                     }
                                 )
                             }
@@ -120,11 +129,13 @@ export class Viewer extends Object3D {
                             dedup()
                         )
 
-                        progressDiv.innerHTML = `Enable Instancing`
-                        await document.transform(
-                            // Remove duplicate vertex or texture data, if any.
-                            instance()
-                        )
+                        if (!enablAnimations) {
+                            progressDiv.innerHTML = `Enable Instancing`
+                            await document.transform(
+                                // Remove duplicate vertex or texture data, if any.
+                                instance()
+                            )
+                        }
 
                         progressDiv.innerHTML = `Remove Unused buffers`
                         await document.transform(
@@ -245,57 +256,45 @@ export class Viewer extends Object3D {
                     domres[i]?.remove()
                 }
 
+                let dndp = document.createElement('div')
+                dndp.className = 'compressanddownload'
+                dndp.style.position = 'fixed'
+                dndp.style.top = '0px'
+                dndp.style.left = '0px'
+                dndp.style.zIndex = '30000'
+                window.document.body.appendChild(dndp)
+
+                let reso = window.document.createElement('select')
+                reso.style.display = 'inline-block'
+                reso.innerHTML = `
+
+                <option value={4096} selected> 4K Texture</option>
+                <option value={2048}> 2K Texture</option>
+                <option value={1024}> 1K Texture</option>
+                <option value={512}>0.5K Texture</option>
+                `
+                dndp.appendChild(reso)
+
+                let animationOrNot = window.document.createElement('select')
+                animationOrNot.style.display = 'inline-block'
+                animationOrNot.innerHTML = `
+                <option value={false} selected> No Anim, yes Instnacing</option>
+                <option value={true}> Yes Anim, no instancing</option>
+                `
+                dndp.appendChild(animationOrNot)
+
                 let dnd = window.document.createElement('button')
                 dnd.className = 'compressanddownload'
-                dnd.style.position = 'fixed'
-                dnd.style.top = '0px'
-                dnd.style.left = '0px'
-                dnd.style.display = 'block'
+                dnd.style.display = 'inline-block'
                 dnd.style.zIndex = '30000'
+                dnd.innerHTML = 'Compress'
+                dndp.appendChild(dnd)
 
-                dnd.innerHTML = '4K WebP'
-
-                dnd.onclick = handler(4096)
-                window.document.body.appendChild(dnd)
-
-                let dnd2 = window.document.createElement('button')
-                dnd2.className = 'compressanddownload'
-                dnd2.style.position = 'fixed'
-                dnd2.style.top = '0px'
-                dnd2.style.left = '80px'
-                dnd2.style.display = 'block'
-                dnd2.style.zIndex = '30000'
-
-                dnd2.innerHTML = '2K WebP'
-
-                dnd2.onclick = handler(2048)
-                window.document.body.appendChild(dnd2)
-
-                let dnd3 = window.document.createElement('button')
-                dnd3.className = 'compressanddownload'
-                dnd3.style.position = 'fixed'
-                dnd3.style.top = '0px'
-                dnd3.style.left = '160px'
-                dnd3.style.display = 'block'
-                dnd3.style.zIndex = '30000'
-
-                dnd3.innerHTML = '1K WebP'
-
-                dnd3.onclick = handler(1024)
-                window.document.body.appendChild(dnd3)
-
-                let dnd4 = window.document.createElement('button')
-                dnd4.className = 'compressanddownload'
-                dnd4.style.position = 'fixed'
-                dnd4.style.top = '0px'
-                dnd4.style.left = '250px'
-                dnd4.style.display = 'block'
-                dnd4.style.zIndex = '30000'
-
-                dnd4.innerHTML = 'Half K WebP'
-
-                dnd4.onclick = handler(1024)
-                window.document.body.appendChild(dnd4)
+                dnd.onclick = () => {
+                    let imgRes = reso.value
+                    let enableAnim = animationOrNot.value
+                    handler(imgRes, enableAnim)()
+                }
             }
         })
 
