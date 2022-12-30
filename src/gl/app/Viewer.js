@@ -64,12 +64,6 @@ export class Viewer extends Object3D {
 
                         let arrayBufferFromThreeLoader = await new Promise(
                             (resolve, reject) => {
-                                myGLB.scene.traverse((it) => {
-                                    if (it.material) {
-                                        it.material.vertexColors = false
-                                    }
-                                })
-
                                 exporter.parse(
                                     myGLB.scene.children,
                                     (binary) => {
