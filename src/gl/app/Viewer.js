@@ -15,7 +15,7 @@ import {
     textureResize,
 } from '@gltf-transform/functions'
 import md5 from 'md5'
-
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
 export class Viewer extends Object3D {
     constructor({ core }) {
         super()
@@ -28,35 +28,84 @@ export class Viewer extends Object3D {
 
         window.addEventListener('file-reading-done', async ({ detail }) => {
             if (detail.fileData) {
-                this.loader.parseAsync(detail.fileData.buffer).then((glb) => {
-                    this.core.scene.clear()
-                    this.core.scene.add(glb.scene)
-                })
+                let myGLB = await this.loader
+                    .parseAsync(detail.fileData.buffer)
+                    .then((glb) => {
+                        this.core.scene.clear()
+                        this.core.scene.add(glb.scene)
+
+                        return glb
+                    })
+
+                let progressDiv = document.createElement('button')
+                document.body.appendChild(progressDiv)
+                progressDiv.style.cssText = `
+                        position: absolute;
+                        top: 0px;
+                        left: 50%;
+                    `
+                progressDiv.innerText = `Status: Ready`
 
                 let handler =
                     (res = 4096) =>
                     async () => {
-                        let arrayBuffer = await detail.fileData.buffer
+                        // let arrayBufferRaw = await detail.fileData.raw
 
+                        // let loader = new GLTFLoader()
+                        // let draco = new DRACOLoader()
+                        // draco.setDecoderPath('./draco/')
+                        // loader.setDRACOLoader(draco)
+
+                        // let glbObj = await loader.parseAsync(arrayBufferRaw)
+
+                        let exporter = new GLTFExporter()
+
+                        myGLB.scene.traverse((it) => {
+                            if (it.material) {
+                                it.material.vertexColors = false
+                            }
+                        })
+
+                        let arrayBufferFromThreeLoader = await new Promise(
+                            (resolve, reject) => {
+                                exporter.parse(
+                                    myGLB.scene.children,
+                                    (binary) => {
+                                        resolve(binary)
+                                    },
+                                    () => {},
+                                    {
+                                        binary: true,
+                                        // animations: myGLB.animations,
+                                    }
+                                )
+                            }
+                        )
+
+                        // console.log(arrayBufferFromThreeLoader)
+
+                        let arrayBufferForTransfrom = arrayBufferFromThreeLoader
+
+                        let arrayBuffer = arrayBufferForTransfrom
                         const io = new WebIO({ credentials: 'include' })
 
                         io.registerExtensions([...ALL_EXTENSIONS])
 
                         // ...
 
-                        // let dracoMod = await import(
-                        //     /* webpackIgnore: true */
-                        //     '/draco/draco_decoder_raw.js'
-                        // )
-                        // let mod = dracoMod.DracoDecoderModule()
+                        let dracoMod = await import(
+                            /* webpackIgnore: true */
+                            './draco/draco_encoder_raw.js'
+                        )
+                        let mod = dracoMod.DracoEncoderModule()
 
-                        // io.registerExtensions([
-                        //     DracoMeshCompression,
-                        // ]).registerDependencies({
-                        //     // 'draco3d.decoder': await draco3d.createDecoderModule(), // Optional.
-                        //     // 'draco3d.encoder': mod, // Optional.
-                        //     'draco3d.decoder': mod, // Optional.
-                        // })
+                        io.registerExtensions([
+                            DracoMeshCompression,
+                        ]).registerDependencies({
+                            // 'draco3d.decoder': await draco3d.createDecoderModule(), // Optional.
+                            'draco3d.encoder': mod, // Optional.
+                            // 'draco3d.decoder': mod, // Optional.
+                        })
 
                         // io.setVertexLayout(VertexLayout.SEPARATE)
 
@@ -67,35 +116,36 @@ export class Viewer extends Object3D {
                             new Uint8Array(arrayBuffer)
                         ) // Uint8Array → Document
 
-                        dnd.innerHTML = `Remove Duplicate Buffers / Textures`
+                        progressDiv.innerHTML = `Remove Duplicate Buffers / Textures`
                         await document.transform(
                             // Remove duplicate vertex or texture data, if any.
                             dedup()
                         )
 
-                        dnd.innerHTML = `Enable Instancing`
+                        progressDiv.innerHTML = `Enable Instancing`
                         await document.transform(
                             // Remove duplicate vertex or texture data, if any.
                             instance()
                         )
 
-                        dnd.innerHTML = `Remove Unused buffers`
+                        progressDiv.innerHTML = `Remove Unused buffers`
                         await document.transform(
                             // Remove duplicate vertex or texture data, if any.
                             prune()
                         )
 
-                        dnd.innerHTML = `Texture Reduction, may took a long time....`
+                        progressDiv.innerHTML = `Texture Reduction, may took a long time....`
                         await document.transform(
                             // Remove duplicate vertex or texture data, if any.
                             textureResize({ size: [res, res] })
                         )
 
                         // let hh = ({ detail }) => {
-                        //     dnd.innerHTML = `Compression ${(detail * 100).toFixed(
+                        //     progressDiv.innerHTML = `Compression ${(detail * 100).toFixed(
                         //         3
                         //     )}%`
                         // }
+                        progressDiv.innerHTML = `webp`
                         // window.addEventListener('progress-notice', hh)
                         await document.transform(
                             // Remove duplicate vertex or texture data, if any.
@@ -109,21 +159,30 @@ export class Viewer extends Object3D {
                             webpTransform({
                                 //
                                 onProgress: (p) => {
-                                    dnd.innerHTML = `Compression ${(
+                                    progressDiv.innerHTML = `Compression ${(
                                         p * 100
                                     ).toFixed(1)}%`
                                 },
                             })
                         )
+                        progressDiv.innerHTML = `compress draco`
+
+                        await document
+                            .createExtension(DracoMeshCompression)
+                            .setRequired(true)
+                            .setEncoderOptions({
+                                method: DracoMeshCompression.EncoderMethod
+                                    .SEQUENTIAL,
+                                encodeSpeed: 5,
+                                decodeSpeed: 5,
+                            })
 
                         const glb = await io.writeBinary(document) // Document → Uint8Array
-                        dnd.innerHTML = `Compress and Download `
+                        progressDiv.innerHTML = ``
 
                         function basename(path) {
                             return path.replace(/\\/g, '/').replace(/.*\//, '')
                         }
-
-                        console.log()
 
                         let arr = basename(detail.filePath).split('.')
                         arr.pop()
